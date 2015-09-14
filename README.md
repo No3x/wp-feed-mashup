@@ -1,1 +1,1 @@
-# wp-feed-mashup
+# WP Feed Mashup
