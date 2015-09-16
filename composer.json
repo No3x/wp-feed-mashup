@@ -1,0 +1,46 @@
+{
+    "name": "no3x/wp-feed-mashup",
+    "description": "WordPress plugin to add feeds from various sources and show them in a nice way.",
+    "type": "wordpress-plugin",
+    "keywords": ["feed", "rss", "mashup"],
+    "homepage": "https://github.com/No3x/wp-feed-mashup",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/No3x/wp-orm"
+        }
+    ],
+    "require": {
+        "brandonwamboldt/wp-orm": "dev-master",
+        "pimple/pimple": "~3.0",
+        "twig/twig": "~1.0"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "0.6.0"
+    },
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "No3x",
+            "email": "no3x@no3x.de",
+            "homepage": "http://no3x.de",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/No3x/wp-feed-mashup/issues",
+        "source": "https://github.com/No3x/wp-feed-mashup/releases"
+
+    },
+    "scripts": {
+        "post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs",
+        "post-update-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "No3x\\WPFM\\": "src",
+            "No3x\\WPFM\\Core\\": "src/Core"
+        }
+    }
+}

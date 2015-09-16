@@ -1,0 +1,6 @@
+<li role="presentation" class="{{ first ? 'active' : '' }}">
+    <a href="#{{ feed.id  }}" aria-controls="{{ feed.id  }}" role="tab" data-toggle="tab">
+        <img class="img-circle" src="https://s3.amazonaws.com/uifaces/faces/twitter/dustinlamont/128.jpg" />
+        <span class="quote"><i class="{{ (feed.icon is defined) ? feed.icon : options.default_icon }}"></i></span>
+    </a>
+</li>
