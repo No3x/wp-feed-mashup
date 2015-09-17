@@ -10,29 +10,43 @@ namespace No3x\WPFM\Feed;
 use No3x\WPFM\Model\Feed;
 use No3x\WPFM\Model\FeedItem;
 
+/**
+ * Retrieves FeedItems from Feeds via rss reader.
+ * It implements a cache.
+ * @package No3x\WPFM\Feed
+ */
 class FeedReader implements IFeedReader, ITransientCache {
-
+	/**
+	 * @var Feed[] subscribed feeds.
+	 */
 	private $feeds;
-
-	function __construct() {
-		$this->purge();
-	}
 
 	function addActionsAndFilters() {
 		add_action( 'init', array( $this, 'init') );
 	}
 
+	/**
+	 * Initialises '$feeds' on WordPress init.
+	 */
 	function init() {
 		if ( false !== ($feeds_cached = $this->load() ) ) {
 			$this->feeds = $feeds_cached;
 		}
 	}
 
+	/**
+	 * Add a feed to Reader.
+	 * @param Feed $feed the feed to add
+	 */
 	function addFeed(Feed $feed) {
 		$feed->save();
 		$this->refresh();
 	}
 
+	/**
+	 * Remove Feed from reader
+	 * @param Feed $feed the feed to remove
+	 */
 	function removeFeed(Feed $feed) {
 		$feed->delete();
 		$this->refresh();
@@ -48,9 +62,12 @@ class FeedReader implements IFeedReader, ITransientCache {
 			return $this->feeds[$id];
 	}
 
+	/**
+	 * Refreshes the cached data.
+	 * @return mixed
+	 */
 	function refresh() {
 		foreach( Feed::all() as $feed ) {
-			/* @var $feed Feed */
 			$feeds_new = $this->fetch( $feed );
 			if( false === $feeds_new ) {
 				// There was a problem loading new content
@@ -68,10 +85,13 @@ class FeedReader implements IFeedReader, ITransientCache {
 				$this->feeds[$feed->get_id()] = $feeds_new;
 			}
 		}
-		error_log( "set transient now " );
-		set_transient( ITransientCache::TRANSIENT_NAME, maybe_serialize($this->feeds), 1 * MINUTE_IN_SECONDS);
+		$this->save();
 	}
 
+	/**
+	 * Returns the cached data.
+	 * @return mixed
+	 */
 	function load() {
 		if ( false !== ( $feeds_cached = maybe_unserialize( get_transient( ITransientCache::TRANSIENT_NAME ) ) ) ) {
 			return $feeds_cached;
@@ -81,9 +101,20 @@ class FeedReader implements IFeedReader, ITransientCache {
 		}
 	}
 
-	function purge()
-	{
+	/**
+	 * Removed the cached data.
+	 * @return mixed
+	 */
+	function clear() {
 		delete_transient( ITransientCache::TRANSIENT_NAME );
+	}
+
+	/**
+	 * Saves the data to cache.
+	 * @return mixed
+	 */
+	function save() {
+		set_transient( ITransientCache::TRANSIENT_NAME, maybe_serialize($this->feeds), 1 * MINUTE_IN_SECONDS);
 	}
 
 	private function fetch( Feed $feed ) {
@@ -121,6 +152,4 @@ class FeedReader implements IFeedReader, ITransientCache {
 		}
 		return false;
 	}
-
-
 }

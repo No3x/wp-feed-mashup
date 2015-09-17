@@ -8,7 +8,10 @@
 
 namespace No3x\WPFM\Core;
 
-
+/**
+ * Parses meta information from file.
+ * @package No3x\WPFM\Core
+ */
 class MetaParser {
 
 	private $mainPluginFileName;
