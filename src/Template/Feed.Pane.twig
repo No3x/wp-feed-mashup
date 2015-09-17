@@ -1,7 +1,7 @@
-<div role="tabpanel" class="tab-pane fade in {{ first ? 'active' : '' }}" id="{{ feed.id }}">
+<div role="tabpanel" class="tab-pane fade in {{ first ? 'active' : '' }}" id="{{ index }}">
     <div class="tab-inner">
-        <p class="lead">{{ feed.content  }}</p>
+        <p class="lead">{{ feedItem.desc|raw }}</p>
         <hr>
-        <p><em class="text-capitalize">{{ feed.source }} <span class="sep">|</span> <a href="{{ feed.rss_link  }}">{{ feed.timestamp }} </a></em></p>
+        <p><em class="text-capitalize">{{ feedItem.source|raw }} <span class="sep">|</span> <a href="{{ feedItem.link|raw }}">{{ feedItem.date_posted|humanDateDiff }} ago</a></em></p>
     </div>
 </div>

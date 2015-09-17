@@ -24,14 +24,14 @@ class Init {
 		$container['plugin-meta'] = function ($c) use ( $file ) {
 			return new PluginMeta( new MetaParser( $file ) );
 		};
-		$container['FeedReader']= function ($c) {
+		$container['FeedReader'] = function ($c) {
 			return new FeedReader();
 		};
 		$container['ShortcodeFeedMashup']= function ($c) {
-			return new ShortcodeFeedMashup();
+			return new ShortcodeFeedMashup( $c['FeedReader'] );
 		};
 		$container->addActionsAndFilters();
-		$container['Plugin']->install();
+
 		/*
 		 * Install the plugin
 		 * NOTE: this file gets run each time you *activate* the plugin.

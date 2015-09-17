@@ -7,33 +7,29 @@
  */
 
 namespace No3x\WPFM\Template;
+use No3x\WPFM\Twig\TwigExtensions;
+use No3x\WPFM\Model\FeedItem;
 
 
 class Feed {
 
-	public static function render( $data ) {
+	public static function render( $feed, $feedItems, $attributes = null ) {
 		$loader = new \Twig_Loader_Filesystem( plugin_dir_path( __FILE__));
 		$twig = new \Twig_Environment($loader, array( 'debug' => true ) );
+		$twig->addExtension( new TwigExtensions() );
 		$twig->addExtension( new \Twig_Extension_Debug() );
-		$feeds[] = array(
-			'id' => '12',
-			'timestamp' => human_time_diff( time () ),
-			'source' => 'GitHub',
-			'title' => 'My First Feed',
-			'content' => 'My First Feed Content',
-			'icon' => 'fa fa-github',
-		);
-		$feeds[] = array(
-			'id' => '17',
-			'timestamp' => human_time_diff(  time ()  ),
-			'source' => 'Twitter',
-			'title' => 'Twitter Feed',
-			'content' => 'Twitter Feed Content',
-		);
+		foreach( $feedItems as $feedItem ) {
+			/* @var $feedItem FeedItem */
+			$feedItem->icon = 'fa fa-github';
+			$feedItem->source = $feed->get_title();
+		}
 		$options = array(
 			'default_icon' => 'fa fa-quote-left',
 			'first_active' => true,
 		);
-		return $twig->render('Feed.twig', array( 'feeds' => $feeds, 'options' => $options ) );
+		return $twig->render('Feed.twig', array(
+			'feedItems' => $feedItems,
+			'options' => $options
+		) );
 	}
 } 
